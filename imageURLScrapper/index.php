@@ -22,6 +22,6 @@ function scrapeImages($url) {
 }
 
 // Example usage:
-$urlToScrape = 'https://automobilesarabais.thankscanada.com/'; // Replace with the URL of the website you want to scrape
+$urlToScrape = 'https://finance.pretauto60minutes.ca/'; // Replace with the URL of the website you want to scrape
 scrapeImages($urlToScrape);
 ?>
