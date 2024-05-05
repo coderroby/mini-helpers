@@ -23,13 +23,23 @@
 
     <div class="container">
         <div class="row" id="top-filters-box">
+            <div class="col-md-6">
+                <h3>Title</h3>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group mt-3">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search...">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" id="advanceFilterBtn">Advance Filter</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-3" id="filter">
                 <button id="resetFilters" class="btn btn-primary mt-3">Reset Filters</button>
                 <label for="cardsPerPage" class="filterby">Cards Per Page:</label>
                 <select class="form-control" id="cardsPerPage">
-                    <option value="6">6</option>
                     <option value="9">9</option>
                     <option value="12">12</option>
                     <option value="24">24</option>
@@ -78,6 +88,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         var currentPage = 0;
+        var cardsPerRow = 4; // Number of cards per row
         var cardsPerPage = 9;
         var data = [];
         var offices = {};
@@ -99,6 +110,16 @@
                     renderPagination();
                     setSalaryRange();
                 }
+            });
+
+            $('#advanceFilterBtn').click(function() {
+                $('#filter').toggle();
+                if ($('#filter').is(':visible')) {
+                    cardsPerRow = 3; // Adjust cards per row when filter is visible
+                } else {
+                    cardsPerRow = 4; // Default number of cards per row
+                }
+                showCards(currentPage);
             });
 
             $('#cardsPerPage').change(function() {
@@ -145,6 +166,16 @@
                 renderPagination();
                 updateSelectedSalaryRange();
             });
+
+            // Search functionality
+            $('#searchInput').on('input', function() {
+                var searchTerm = $(this).val().toLowerCase();
+                var filteredData = data.filter(function(item) {
+                    return item.office.toLowerCase().includes(searchTerm) || item.position.toLowerCase().includes(searchTerm);
+                });
+                renderFilteredCards(filteredData);
+                renderPagination();
+            });
         });
 
         function showCards(page) {
@@ -154,7 +185,7 @@
             var cardsHtml = '';
             for (var i = startIndex; i < endIndex && i < filteredData.length; i++) {
                 var item = filteredData[i];
-                cardsHtml += '<div class="col-md-4 mb-3">';
+                cardsHtml += '<div class="col-md-' + cardsPerRow + ' mb-3">'; // Adjust column size based on cardsPerRow
                 cardsHtml += '<div class="card">';
                 cardsHtml += '<div class="card-body">';
                 cardsHtml += '<h5 class="card-title">' + item.name + '</h5>';
@@ -273,6 +304,25 @@
                     item.salary >= minSalary;
             });
             return filteredData;
+        }
+
+        function renderFilteredCards(filteredData) {
+            var cardsHtml = '';
+            for (var i = 0; i < filteredData.length; i++) {
+                var item = filteredData[i];
+                cardsHtml += '<div class="col-md-4 mb-3">';
+                cardsHtml += '<div class="card">';
+                cardsHtml += '<div class="card-body">';
+                cardsHtml += '<h5 class="card-title">' + item.name + '</h5>';
+                cardsHtml += '<p class="card-text">Position: ' + item.position + '</p>';
+                cardsHtml += '<p class="card-text">Office: ' + item.office + '</p>';
+                cardsHtml += '<p class="card-text">Start Date: ' + item.start_date + '</p>';
+                cardsHtml += '<p class="card-text">Salary: ' + item.salary + '</p>';
+                cardsHtml += '</div>';
+                cardsHtml += '</div>';
+                cardsHtml += '</div>';
+            }
+            $('#card-container').html(cardsHtml);
         }
     </script>
 
