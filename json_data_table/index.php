@@ -7,6 +7,11 @@
     <title>Home</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
+
+
+</head>
+
+<body>
     <style>
         #card-container {
             padding-top: 30px;
@@ -16,10 +21,6 @@
             min-height: 250px;
         }
     </style>
-
-</head>
-
-<body>
 
     <div class="container">
         <div class="row" id="top-filters-box">
