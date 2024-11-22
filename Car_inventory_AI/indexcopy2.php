@@ -96,6 +96,33 @@
                 </div>
 
                 <div class="mb-3">
+                    <!-- <label for="priceMin" class="form-label">Price Minimum</label> -->
+                    <select id="priceMin" class="form-select">
+                        <option selected="selected" value="0">Minimum Price</option>
+                        <option value="1000">$1,000</option>
+                        <option value="5000">$5,000</option>
+                        <option value="10000">$10,000</option>
+                        <option value="20000">$20,000</option>
+                        <option value="30000">$30,000</option>
+                        <option value="50000">$50,000</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <!-- <label for="priceMax" class="form-label">Price Maximum</label> -->
+                    <select id="priceMax" class="form-select">
+                        <option selected="selected" value="0">Maximum Price</option>
+                        <option value="10000">$10,000</option>
+                        <option value="20000">$20,000</option>
+                        <option value="30000">$30,000</option>
+                        <option value="50000">$50,000</option>
+                        <option value="100000">$100,000</option>
+                        <option value="200000">$200,000</option>
+                    </select>
+                </div>
+
+
+                <div class="mb-3">
                     <input type="number" id="max-price-filter" class="form-control" placeholder="Enter max price">
                 </div>
                 <div class="mb-3">
@@ -310,8 +337,8 @@
                     filteredCars = carData.filter(car => {
                         return (!maker || car.maker.toLowerCase().includes(maker)) &&
                             (!model || car.model.toLowerCase().includes(model)) &&
-                            (!max_car_price || car.car_price <= max_car_price) &&
-                            (!min_car_price || car.car_price >= min_car_price) &&
+                            (!max_car_price || car.max_car_price <= max_car_price) &&
+                            (!min_car_price || car.min_car_price >= min_car_price) &&
                             (!car_year || car.car_year == car_year) &&
                             (!car_transmission || car.car_transmission.toLowerCase().includes(car_transmission)) &&
                             (!car_exterior_color || car.car_exterior_color.toLowerCase().includes(car_exterior_color)) &&
@@ -369,6 +396,26 @@
                     currentPage = 1;
                     displayCars(filteredByYear, currentPage);
                 });
+
+                document.getElementById('priceMin').addEventListener('change', function() {
+                    const minPrice = parseInt(this.value);
+                    filterByPrice(minPrice, 'min');
+                });
+
+                document.getElementById('priceMax').addEventListener('change', function() {
+                    const maxPrice = parseInt(this.value);
+                    filterByPrice(maxPrice, 'max');
+                });
+
+                function filterByPrice(value, type) {
+                    let filteredCars = carsData;
+                    if (type === 'min') {
+                        filteredCars = filteredCars.filter(car => car.price >= value);
+                    } else if (type === 'max') {
+                        filteredCars = filteredCars.filter(car => car.price <= value);
+                    }
+                    displayCars(filteredCars); 
+                }
 
                 document.getElementById('transmission-filter').addEventListener('change', filterCars);
                 document.getElementById('color-filter').addEventListener('change', filterCars);
